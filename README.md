@@ -3,9 +3,9 @@
 davinci resolve lua script, Creating title text from timeline markers;
 
 ## 如何使用
-1. 把该脚本`markers_to_progress_bar_title.lua`放置到`<Your_DaVinci_Script_Path>/Comp`文件夹下；
+1. 把该脚本`markers_to_progress_bar_title.lua`放置到`<Your_DaVinci_Fusion_Script_Path>/Comp`文件夹下；
    ```
-   -- <Your_DaVinci_Script_path>
+   -- <Your_DaVinci_Fusion_Script_Path>
     Mac OS X:
       - All users: /Library/Application Support/Blackmagic Design/DaVinci Resolve/Fusion/Scripts
       - Specific user:  /Users/<UserName>/Library/Application Support/Blackmagic Design/DaVinci Resolve/Fusion/Scripts
@@ -30,3 +30,20 @@ davinci resolve lua script, Creating title text from timeline markers;
 1. `进度条标题在` :: 屏幕中的位置
 2. `时间码显示小时` :: 当第一个标记的备注中有 `%time%` 才有效，默认时间码格式显示 `00:00:00`, 启用后格式 `00:00:00:00`
 3. `创建文字样式控制` :: 创建文字样式方便于主/副标题文字样式的统一控制修改，但是生成较慢，而且渲染更慢；不勾选的话，更快但不便于修改。
+
+## 默认字体
+- 创建进度条标题的时候默认字体是使用macOS上的`黑体-简`，在其他系统上可能会缺少字体而显示 `口口口`。
+- 如果你是Linux或Windows用户，请修改`defaultFont`中的默认字体设置，可以在脚本文件中通过搜索`Heiti SC` 或 `默认字体` 找到修改的地方。
+- title 是主标题，从标记的 `名称` 获取；
+- subTitle 是副标题，从标记的 `备注` 获取。
+
+```
+local function DefaultFont()
+    -- 在这里修改你的默认字体
+    local defaultFont = {
+        title = {font="Heiti SC", style="Medium", size=0.018, space = 1},
+        subTitle = {font="Heiti SC", style="Light", size=0.014, space = 1.5}
+    }
+    return defaultFont
+end
+```

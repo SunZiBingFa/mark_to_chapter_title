@@ -5,7 +5,7 @@ local function DefaultFont()
     -- 在这里修改你的默认字体
     local defaultFont = {
         title = {font="Heiti SC", style="Medium", size=0.018, space = 1},
-        subTitle = {font="Heiti SC", style="Light", size=0.014, space = 1.5},
+        subTitle = {font="Heiti SC", style="Light", size=0.014, space = 1.5}
     }
     return defaultFont
 end
