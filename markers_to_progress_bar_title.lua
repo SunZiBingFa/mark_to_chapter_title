@@ -1,47 +1,13 @@
 -- 这是一个从Tag创建视频进度条的脚本
 -- 只能在DaVinci Resolve中使用
 
-local function detectOS()
-    -- 尝试判断Windows
-    local isWindows = os.execute("ver >nul 2>&1") == 0
-    
-    if not isWindows then
-        -- 尝试判断Unix-like系统（包括Linux和macOS）
-        local f = io.popen("uname -s")
-        if f then
-            local sysname = f:read():lower():gsub("%s+", "")
-            f:close()
-            
-            if sysname == "linux" then
-                return "Linux"
-            elseif sysname == "darwin" then
-                return "macOS"
-            end
-        end
-    end
-    return isWindows and "Windows" or "Unknown"
-end
-
-local function GetOSFont()
-    local OS = detectOS()
-    local OSfont = {}
-    if OS == "macOS" then
-        OSfont = {
-            title = {font="Heiti SC", style="Medium", size=0.018, space = 1},
-            subTitle = {font="Heiti SC", style="Light", size=0.014, space = 1.5},
-        }
-    elseif OS == "Linux" then
-        OSfont = {
-            title = {font="Heiti SC", style="Medium", size=0.018, space = 1},
-            subTitle = {font="Heiti SC", style="Light", size=0.014, space = 1.5},
-        }
-    else
-        OSfont = {
-            title = {font="Heiti SC", style="Medium", size=0.02, space = 1},
-            subTitle = {font="Heiti SC", style="Light", size=0.015, space = 1.5},
-        }
-    end
-    return OSfont
+local function DefaultFont()
+    -- 在这里修改你的默认字体
+    local defaultFont = {
+        title = {font="Heiti SC", style="Medium", size=0.018, space = 1},
+        subTitle = {font="Heiti SC", style="Light", size=0.014, space = 1.5},
+    }
+    return defaultFont
 end
 
 local function SortMarkers(markers)
@@ -286,13 +252,13 @@ local function FusionProgressTitle(comp, config)
     mainBG:ConnectInput("EffectMask", titleMask)
     comp:GetFrameList()[1]:ViewOn(mediaOut, 2)
 
-    local OSfont = GetOSFont()
+    local default = DefaultFont()
 
     delimiterXfNodes(comp, shapeColor, mMergeA, config.screenSide)
-    titleSetting = {font=OSfont.title.font, style=OSfont.title.style, size=OSfont.title.size, space = OSfont.title.space,
+    titleSetting = {font=default.title.font, style=default.title.style, size=default.title.size, space = default.title.space,
                     fontStyleName = "titleFontStyle", titleName = "title", contextTag = "name",
                     yOffset = 8}
-    subTtileSetting = {font=OSfont.subTitle.font, style=OSfont.subTitle.style, size=OSfont.subTitle.size, space = OSfont.subTitle.space,
+    subTtileSetting = {font=default.subTitle.font, style=default.subTitle.style, size=default.subTitle.size, space = default.subTitle.space,
                     fontStyleName = "subTitleFontStyle", titleName = "subTitle", contextTag = "note", 
                     yOffset = 0}
     AddTextAndXfNodes(comp, mMergeB, titleMask, config, titleSetting)
