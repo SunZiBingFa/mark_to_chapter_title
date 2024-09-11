@@ -1,6 +1,6 @@
-# fucript-markers_to_title
-达芬奇Resolve的lua脚本，从时间线标记创建进度条的标题文字; 
-davinci resolve lua script, Creating title text from timeline markers;
+# Mark_to_chapter_title.git
+达芬奇Resolve的lua脚本，从时间线标记创建进度条的标题文字。<br/>
+davinci resolve lua script, Creating chapter title text from timeline markers。
 
 ## 如何使用
 1. 把该脚本`markers_to_progress_bar_title.lua`放置到`<Your_DaVinci_Fusion_Script_Path>/Comp`文件夹下；
@@ -24,18 +24,14 @@ davinci resolve lua script, Creating title text from timeline markers;
 
 ## 其他
 1. 生成的节点模板是带有表达式的，方便修改。
-2. 控制节点：`TitleMask`节点的宽度或高度，控制进度条粗细。
-
-## 设置参数
-1. `进度条标题在` :: 屏幕中的位置
-2. `时间码显示小时` :: 当第一个标记的备注中有 `%time%` 才有效，默认时间码格式显示 `00:00:00`, 启用后格式 `00:00:00:00`
-3. `创建文字样式控制` :: 创建文字样式方便于主/副标题文字样式的统一控制修改，但是生成较慢，而且渲染更慢；不勾选的话，更快但不便于修改。
+2. 控制节点：`TitleMask`节点的宽度或高度，控制进度条粗细；`fontStyle`和`subFontStyle`控制文本样式（需勾选`创建文字样式控制`）。
+3. `创建文字样式控制`该选项会创建一个用于修改主/副标题文字样式的节点，但是生成较慢，而且渲染更慢；不勾选的话，更快但不便于修改。如果勾选了该选项，不建议使用该片段渲染，可以修改完样式后配合`DaVinci Resolve`的`抓取静帧`命令，使用静帧替换Fusion片段。
 
 ## 默认字体
-- 创建进度条标题的时候默认字体是使用macOS上的`黑体-简`，在其他系统上可能会缺少字体而显示 `口口口`。
-- 如果你是Linux或Windows用户，请修改`defaultFont`中的默认字体设置，可以在脚本文件中通过搜索`Heiti SC` 或 `默认字体` 找到修改的地方。
-- title 是主标题，从标记的 `名称` 获取；
-- subTitle 是副标题，从标记的 `备注` 获取。
+- 创建进度条标题的时候默认字体是开源字体`思源黑体VF`，可自行搜寻字体下载，该字体免费开源，如缺少该字体会显示 `口口口`。
+- 或者修改代码中`defaultFont`中的默认字体设置，可以在脚本文件中通过搜索`默认字体` 找到修改的地方。
+- `title` 是主标题，从标记的 `名称` 获取字符串；
+- `subTitle` 是副标题，从标记的 `备注` 获取字符串。
 
 ```
 local function DefaultFont()
