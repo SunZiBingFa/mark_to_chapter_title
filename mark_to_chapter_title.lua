@@ -4,8 +4,8 @@
 local function DefaultFont()
     -- 在这里修改你的默认字体
     local defaultFont = {
-        title = {font="Source Han Sans SC VF", style="Medium", size=0.02, space = 1},
-        subTitle = {font="Source Han Sans SC VF", style="Normal", size=0.016, space = 1}
+        title = {font="Source Han Sans SC VF", style="Medium", size=0.02, space = 0.75},
+        subTitle = {font="Source Han Sans SC VF", style="Normal", size=0.016, space = 1.2}
     }
     return defaultFont
 end
@@ -183,11 +183,11 @@ local function SetTitleMask(titleMask, screenSide)
     if screenSide == 0 then -- DOWN
         titleMask.Center:SetExpression("Point(Width/2, Height/2)")
         titleMask.Width = 1
-        titleMask.Height = 0.06
+        titleMask.Height = 0.05
     elseif screenSide == 1 then  --UP
         titleMask.Center:SetExpression("Point(Width/2, 1-Height/2)")
         titleMask.Width = 1
-        titleMask.Height = 0.06
+        titleMask.Height = 0.05
     elseif screenSide == 2 then -- LEFT
         titleMask.Center:SetExpression("Point(Width/2, Height/2)")
         titleMask.Width = 0.08
