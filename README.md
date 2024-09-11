@@ -1,4 +1,4 @@
-# Mark_to_chapter_title.git
+# Mark_to_chapter_title
 达芬奇Resolve的lua脚本，从时间线标记创建进度条的标题文字。<br/>
 davinci resolve lua script, Creating chapter title text from timeline markers。
 
