@@ -3,7 +3,7 @@
 davinci resolve lua script, Creating chapter title text from timeline markers。
 
 ## 如何使用
-1. 把该脚本`markers_to_progress_bar_title.lua`放置到`<Your_DaVinci_Fusion_Script_Path>/Comp`文件夹下；
+1. 把该脚本`mark_to_chapter_title.lua`放置到`<Your_DaVinci_Fusion_Script_Path>/Comp`文件夹下；
    ```
    -- <Your_DaVinci_Fusion_Script_Path>
     Mac OS X:
