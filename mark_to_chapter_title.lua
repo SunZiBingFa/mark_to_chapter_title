@@ -1,11 +1,11 @@
--- 这是一个从Tag创建视频进度条的脚本
+-- 这是一个从标记创建视频进度条的脚本
 -- 只能在DaVinci Resolve中使用
 
 local function DefaultFont()
     -- 在这里修改你的默认字体
     local defaultFont = {
-        title = {font="Heiti SC", style="Medium", size=0.018, space = 1},
-        subTitle = {font="Heiti SC", style="Light", size=0.014, space = 1.5}
+        title = {font="Source Han Sans SC VF", style="Medium", size=0.02, space = 1},
+        subTitle = {font="Source Han Sans SC VF", style="Normal", size=0.016, space = 1}
     }
     return defaultFont
 end
@@ -33,7 +33,7 @@ local function GetTextPos(tagFrame, nextTagFrame, duration)
 end
 
 local function DeleteAllNode(comp)
-    tools = comp:GetToolList()
+    local tools = comp:GetToolList()
     for _, node in pairs(tools) do
         node:Delete()
     end
@@ -66,6 +66,7 @@ local function delimiterXfNodes(comp, beforeNode, afterNode, screenSide)
 end
 
 local function FrameToTimecode(frame, showHours)
+    local timecode = nil
     local frameRate = project:GetSetting("timelineFrameRate")
     local hours = frame / (3600 * frameRate)
     local minutes = frame / (60 * frameRate) % 60
@@ -81,9 +82,9 @@ end
 
 local function NoteLinkData(node, linkNode)
     for i, v in pairs(node:GetInputList()) do
-        id = v:GetAttrs().INPS_ID
+        local id = v:GetAttrs().INPS_ID
         if id ~= "StyledText" then
-            expression = linkNode.Name .. "." .. id
+            local expression = linkNode.Name .. "." .. id
             node[id]:SetExpression(expression)
         end
     end
@@ -98,12 +99,18 @@ local function AddTextAndXfNodes(comp, mergeNode, titleMask, config, titleSettin
     local showHours = config.showHours
     local createFontStyle = config.createFontStyle
 
-    if titleSetting.contextTag == "note" then
+    if (titleSetting.contextTag == "note") and (config.isTimecode == 0) then
         local allSubTitle = ""
         for i = 1, count do
             allSubTitle = allSubTitle .. markers[i].note
         end
         if allSubTitle == "" then
+            local tools = comp:GetToolList()
+            for i, tool in pairs(tools) do
+                if tool:GetAttrs().TOOLS_Name == "mMergeC" then
+                    tool:Delete()
+                end
+            end
             return
         end
     end
@@ -134,15 +141,12 @@ local function AddTextAndXfNodes(comp, mergeNode, titleMask, config, titleSettin
 
         if titleSetting.contextTag == "name" then
             context = markers[i].name
-            if (markers[i].note ~= "") or string.find(markers[1].note, "%%time%%") then
+            if (markers[i].note ~= "") or (config.isTimecode == 1) then
                 context = context .. "\n"
             end
         elseif titleSetting.contextTag == "note" then
-            if string.find(markers[1].note, "%%time%%") then
+            if (config.isTimecode == 1) then
                 context = FrameToTimecode(markers[i].frame, showHours) .. markers[i].note
-                if i == 1 then
-                    context = string.gsub(context, "%%time%%", "")
-                end
             else
                 context = markers[i].note
             end
@@ -166,7 +170,6 @@ local function AddTextAndXfNodes(comp, mergeNode, titleMask, config, titleSettin
             xf.Center:SetExpression("Point(1 - " .. titleMask.Name .. ".Width / 2, " .. tPos .. ")")
         end
 
-        xf.Center = {xfCenterX, 0.5}
         xf:ConnectInput("Input", title)
         if i == 1 then
             mergeNode:ConnectInput("Background", xf)
@@ -187,11 +190,11 @@ local function SetTitleMask(titleMask, screenSide)
         titleMask.Height = 0.06
     elseif screenSide == 2 then -- LEFT
         titleMask.Center:SetExpression("Point(Width/2, Height/2)")
-        titleMask.Width = 0.06
+        titleMask.Width = 0.08
         titleMask.Height = 1
     elseif screenSide == 3 then --RIGHT
         titleMask.Center:SetExpression("Point(1-Width/2, Height/2)")
-        titleMask.Width = 0.06
+        titleMask.Width = 0.08
         titleMask.Height = 1
     end
 end
@@ -255,21 +258,22 @@ local function FusionProgressTitle(comp, config)
     local default = DefaultFont()
 
     delimiterXfNodes(comp, shapeColor, mMergeA, config.screenSide)
-    titleSetting = {font=default.title.font, style=default.title.style, size=default.title.size, space = default.title.space,
+    local titleSetting = {font=default.title.font, style=default.title.style, size=default.title.size, space = default.title.space,
                     fontStyleName = "titleFontStyle", titleName = "title", contextTag = "name",
                     yOffset = 8}
-    subTtileSetting = {font=default.subTitle.font, style=default.subTitle.style, size=default.subTitle.size, space = default.subTitle.space,
+    local subTitleSetting = {font=default.subTitle.font, style=default.subTitle.style, size=default.subTitle.size, space = default.subTitle.space,
                     fontStyleName = "subTitleFontStyle", titleName = "subTitle", contextTag = "note", 
                     yOffset = 0}
     AddTextAndXfNodes(comp, mMergeB, titleMask, config, titleSetting)
-    AddTextAndXfNodes(comp, mMergeC, titleMask, config, subTtileSetting)
+    AddTextAndXfNodes(comp, mMergeC, titleMask, config, subTitleSetting)
 end
 
 local function ConfigUI()
     local comp = fusion:GetCurrentComp()
     local ask = {
-        {"screenSide", Name = "进度条标题在", "Dropdown", Options = {"底部", "顶部", "左侧", "右侧"}, Default = 0},
-        {"showHours", Name="时间码显示小时", "Checkbox", NumAcross=2, Default=0},
+        {"screenSide", Name = "章节标题位于", "Dropdown", Options = {"底部", "顶部", "左侧", "右侧"}, Default = 0},
+        {"isTimecode", Name = "副标题插入时间码", "Checkbox", NumAcross=2, Default=0},
+        {"showHours", Name="时间码到小时格式", "Checkbox", NumAcross=2, Default=0},
         {"createFontStyle", Name="创建文字样式控制", "Checkbox", NumAcross=2, Default=0}
     }
     local config = comp:AskUser("Config", ask)

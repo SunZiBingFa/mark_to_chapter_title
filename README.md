@@ -17,14 +17,14 @@ davinci resolve lua script, Creating title text from timeline markers;
       - Specific user: $HOME/.local/share/DaVinciResolve/Fusion/Scripts
    ```
 
-3. 对时间线打标记，快捷键：`M`，注意：必须是时间线上的标记(当没有选中任何片段时，打的标记便是时间线上的标记;或者锁定所有视频轨)，对剪辑片段的标记不会被识别；
-4. 在`DaVinici Resolve`中当前时间线上，最上方轨道添加一个fusion片段；
-5. 进入fusion页面，点击菜单栏中的`工作区`>`脚本`>`markers_to_progress_bar_title`即可，脚本将为从当前时间线的标记创建进度条的Fusion标题.（章节标记）
+2. 对时间线打标记，快捷键：`m`，【注：必须是时间线上的标记才被识别(当没有选中任何片段时，打的就是时间线上的标记；或者锁定所有视频轨后打标记)，对剪辑片段的标记和超出渲染出点的标记将不被识别】；
+3. 双击标记或使用快捷键 `Ctrl/Command + m` 修改标记内容，标记名称即为章节主标题（必须），备注为副标题（可选）；
+4. 在`DaVinici Resolve`中当前时间线上，最上方轨道添加一个fusion片段，播放头确保在fusion片段的时间范围内；
+5. 进入fusion页面，点击菜单栏中的`工作区`>`脚本`>`Comp`>`markers_to_progress_bar_title`启动脚本。
 
-## 须知
-1. 标记的名称将被用作主标题，备注信息为副标题
-2. 当第一个标记的备注信息中包含`%time%`时，将会为所有副标题添加标记的时间码；
-3. 生成的节点模板是带有表达式的，方便修改
+## 其他
+1. 生成的节点模板是带有表达式的，方便修改。
+2. 控制节点：`TitleMask`节点的宽度或高度，控制进度条粗细。
 
 ## 设置参数
 1. `进度条标题在` :: 屏幕中的位置
