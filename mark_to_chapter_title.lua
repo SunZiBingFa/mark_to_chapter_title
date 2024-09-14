@@ -39,7 +39,7 @@ local function DeleteAllNode(comp)
     end
 end
 
-local function delimiterXfNodes(comp, beforeNode, afterNode, screenSide)
+local function delimiterXfNodes(comp, beforeNode, afterNode, screenSide, titleMask)
     local markers = SortMarkers(srcMarkers)
     if markers[1].frame == 0 then
         table.remove(markers, 1)
@@ -50,10 +50,15 @@ local function delimiterXfNodes(comp, beforeNode, afterNode, screenSide)
     for i = 1, count do
         local xf = comp:AddTool("Transform", -3, i-posY)
         local toolName = "delimiterXf_"..i
-        if screenSide == 0 or screenSide == 1 then
-            xf.Center = {markers[i].frame / markers[#markers].frame, 0.5}
-        elseif screenSide == 2 or screenSide == 3 then
-            xf.Center = {0.5, markers[i].frame / markers[#markers].frame}
+        local thickness = markers[i].frame / markers[#markers].frame
+        if screenSide == 0 then
+            xf.Center:SetExpression("Point(" .. thickness .. ", " .. titleMask.Name .. ".Height / 2)")
+        elseif screenSide == 1 then
+            xf.Center:SetExpression("Point(" .. thickness .. ", 1 - " .. titleMask.Name .. ".Height / 2)")
+        elseif screenSide == 2 then
+            xf.Center:SetExpression("Point(" .. titleMask.Name .. ".Width / 2 , " .. thickness .. ")")
+        elseif screenSide == 3 then
+            xf.Center:SetExpression("Point(1 - " .. titleMask.Name .. ".Width / 2 , " .. thickness .. ")")
         end
         xf:SetAttrs({TOOLS_Name = toolName})
         xf:ConnectInput("Input", beforeNode)
@@ -257,7 +262,7 @@ local function FusionProgressTitle(comp, config)
 
     local default = DefaultFont()
 
-    delimiterXfNodes(comp, shapeColor, mMergeA, config.screenSide)
+    delimiterXfNodes(comp, shapeColor, mMergeA, config.screenSide, titleMask)
     local titleSetting = {font=default.title.font, style=default.title.style, size=default.title.size, space = default.title.space,
                     fontStyleName = "titleFontStyle", titleName = "title", contextTag = "name",
                     yOffset = 8}
