@@ -9,8 +9,8 @@ DaVinci Resolve 18.5 以上，因为使用到了 18.5 的 `multiMerge` 节点。
 『思源黑体-VF』
 https://github.com/adobe-fonts/source-han-sans/releases
 
-下载: Variable OTF/TTF/OTC/WOFF2
-修改默认字体详见本文最下方
+下载: Variable OTF/TTF/OTC/WOFF2 <br>
+如果不想下载字体，可以修改默认字体，方法详见本文末尾
 
 
 ## 如何使用
