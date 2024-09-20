@@ -2,8 +2,16 @@
 达芬奇Resolve的lua脚本，从时间线标记创建进度条的标题文字。<br/>
 davinci resolve lua script, Creating chapter title text from timeline markers。
 
-## 版本要求
+## 须知
+### 版本要求
 DaVinci Resolve 18.5 以上，因为使用到了 18.5 的 `multiMerge` 节点。
+### 字体链接
+『思源黑体-VF』
+https://github.com/adobe-fonts/source-han-sans/releases
+
+下载: Variable OTF/TTF/OTC/WOFF2
+修改默认字体详见本文最下方
+
 
 ## 如何使用
 1. 把该脚本`mark_to_chapter_title.lua`放置到`<Your_DaVinci_Fusion_Script_Path>/Comp`文件夹下；
