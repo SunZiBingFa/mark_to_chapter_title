@@ -60,3 +60,7 @@ local function DefaultFont()
     return defaultFont
 end
 ```
+
+## 视频教程
+[BiliBili](https://www.bilibili.com/video/BV1ymtGeqEV4)
+[Youtube](https://www.youtube.com/watch?v=ZURv_O4xrlc)
